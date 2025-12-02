@@ -1,0 +1,91 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   so_long.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mchiacha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/27 11:34:03 by mchiacha          #+#    #+#             */
+/*   Updated: 2025/11/27 11:34:05 by mchiacha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef SO_LONG_H
+# define SO_LONG_H
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 1024
+# endif
+# ifndef _GNU_SOURCE
+#  define _GNU_SOURCE 
+# endif
+# define WINDOW_WIDTH 1900
+# define WINDOW_HEIGHT 1200
+# define TILE_SIZE 64
+# define MLX_ERROR 1
+
+# include <stdlib.h>
+# include <X11/X.h>
+# include <X11/keysym.h>
+# include <stdio.h>
+# include <fcntl.h>
+# include <unistd.h>
+# include <string.h>
+# include "../minilibx-linux/mlx.h"
+# include "../Libft/libft.h"
+
+typedef struct s_data
+{
+    void    *mlx_ptr;
+    void    *win_ptr;
+
+    void    *background;
+    void    *wall;
+    void    *exit_close;
+    void    *exit_open;
+    void    *treasure;
+    void    *floor;
+    void    *player_img;
+
+    int     player_x;
+    int     player_y;
+
+    int offset_x;
+    int offset_y;
+
+    int     player_w;
+    int     player_h;
+
+    char    **map;
+    int     rows;
+    int     cols;
+
+    int     collectibles;
+    int     moves;
+}   t_data;
+
+typedef struct s_pt 
+{ 
+    int x; 
+    int y; 
+}   t_pt;
+
+int flood_check(t_data *data);
+void    free_map(char **map, int rows);
+void    free_images(t_data *data);
+void    clean_and_exit(t_data *data, const char *msg);
+void    finish_game(t_data *data);
+void pixel_to_tile(int px, int py, int *tx, int *ty);
+int handle_keypress(int keysym, void *param);
+int handle_close(void *param);
+void init_player(t_data *data);
+void put_image_with_transparency(t_data *data, void *img, int img_w, int img_h, int x_pos, int y_pos);
+int has_extension_ber(const char *name);
+int validate_map_structure(t_data *data, char **map, char **err_msg);
+char **read_map(const char *filename, int *rows, int *cols);
+void center_map(t_data *data);
+void render_background(t_data *data);
+void render_map(t_data *data);
+
+
+#endif

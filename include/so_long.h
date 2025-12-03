@@ -70,6 +70,13 @@ typedef struct s_pt
     int y; 
 }   t_pt;
 
+typedef struct s_size
+{
+	int rows;
+	int cols;
+}	t_size;
+
+
 int flood_check(t_data *data);
 void    free_map(char **map, int rows);
 void    free_images(t_data *data);
@@ -86,6 +93,21 @@ char **read_map(const char *filename, int *rows, int *cols);
 void center_map(t_data *data);
 void render_background(t_data *data);
 void render_map(t_data *data);
+char	*ft_strjoin(char *s1, char *s2);
+int	ft_is_new_line(char *str);
+char	*ft_get_line(char *str);
+char	*ft_next(char *str);
+char	*get_next_line(int fd);
+int     flood_check(t_data *data);
+void    bfs_run(char **copy, t_pt *queue, int rows, int cols);
+int     flood_verify(char **copy, char **map, int rows, int cols);
+char    **copy_map(char **map, int rows);
+int     find_player(char **map, t_size size, int *sx, int *sy);
+void	set_neighbor(t_pt cur, int dir, int *nx, int *ny);
+void	process_neighbors(char **copy, t_pt cur, t_pt *queue,
+			int *tail, int rows, int cols);
 
+char	**my_free(char *row_line, char **map, int fd, int r);
+char	**my_new_func(char **map, char *row, int r);
 
 #endif

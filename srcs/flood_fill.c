@@ -1,68 +1,64 @@
-
 #include "../include/so_long.h"
 
-int flood_check(t_data *data)
+void	bfs_run(char **copy, t_pt *queue, int rows, int cols)
 {
-    int rows = data->rows, cols = data->cols;
-    char **copy = malloc(sizeof(char*) * rows);
-    if (!copy) return 0;
-    for (int i = 0; i < rows; i++)
-    {
-        copy[i] = ft_strdup(data->map[i]);
-        if (!copy[i])
-        {
-            for (int j = 0; j < i; j++) free(copy[j]);
-            free(copy);
-            return 0;
-        }
-    }
+	int		head;
+	int		tail;
+	t_pt	cur;
 
-    /* find P */
-    int sx = -1, sy = -1;
-    for (int y = 0; y < rows && sx == -1; y++)
-        for (int x = 0; x < cols; x++)
-            if (copy[y][x] == 'P') { sx = x; sy = y; break; }
+	head = 0;
+	tail = 1;
+	while (head < tail)
+	{
+		cur = queue[head++];
+		process_neighbors(copy, cur, queue, &tail, rows, cols);
+	}
+}
 
-    if (sx == -1) { for (int i = 0; i < rows; i++) free(copy[i]); free(copy); return 0; }
+int	flood_verify(char **copy, char **map, int rows, int cols)
+{
+	int	y;
+	int	x;
 
-    /* simple BFS using a queue (array-based) */
-    int capacity = rows * cols + 10;
-    t_pt *queue = malloc(sizeof(t_pt) * capacity);
-    if (!queue) { free_map(copy, rows); return 0; }
-    int head = 0, tail = 0;
-    queue[tail++] = (t_pt){sx, sy};
-    copy[sy][sx] = 'X'; /* mark visited */
+	y = 0;
+	while (y < rows)
+	{
+		x = 0;
+		while (x < cols)
+		{
+			if ((map[y][x] == 'C' || map[y][x] == 'E') && copy[y][x] != 'X')
+				return (0);
+			x++;
+		}
+		y++;
+	}
+	return (1);
+}
 
-    while (head < tail)
-    {
-        t_pt cur = queue[head++];
-        int dx[4] = {1,-1,0,0};
-        int dy[4] = {0,0,1,-1};
-        for (int k = 0; k < 4; k++)
-        {
-            int nx = cur.x + dx[k];
-            int ny = cur.y + dy[k];
-            if (nx < 0 || nx >= cols || ny < 0 || ny >= rows) continue;
-            if (copy[ny][nx] == '1' || copy[ny][nx] == 'X') continue;
-            /* walkable: 0, C, E, P */
-            queue[tail++] = (t_pt){nx, ny};
-            copy[ny][nx] = 'X';
-        }
-    }
+int	flood_check(t_data *data)
+{
+	char	**copy;
+	t_pt	*queue;
+	t_size size;
+	int		sx;
+	int		sy;
 
-    /* now check all C and E visited */
-    int ok = 1;
-    for (int y = 0; y < rows && ok; y++)
-    {
-        for (int x = 0; x < cols; x++)
-        {
-            if (data->map[y][x] == 'C' && copy[y][x] != 'X') { ok = 0; break; }
-            if (data->map[y][x] == 'E' && copy[y][x] != 'X') { ok = 0; break; }
-        }
-    }
-
-    free(queue);
-    for (int i = 0; i < rows; i++) free(copy[i]);
-    free(copy);
-    return ok;
+	size.rows = data->rows;
+	size.cols = data->cols;
+	copy = copy_map(data->map, data->rows);
+	if (!copy)
+		return (0);
+	if (!find_player(copy, size, &sx, &sy))
+		return (free_map(copy, data->rows), 0);
+	queue = malloc(sizeof(t_pt) * (data->rows * data->cols + 1));
+	if (!queue)
+		return (free_map(copy, data->rows), 0);
+	queue[0] = (t_pt){sx, sy};
+	copy[sy][sx] = 'X';
+	bfs_run(copy, queue, data->rows, data->cols);
+	free(queue);
+	if (!flood_verify(copy, data->map, data->rows, data->cols))
+		return (free_map(copy, data->rows), 0);
+	free_map(copy, data->rows);
+	return (1);
 }

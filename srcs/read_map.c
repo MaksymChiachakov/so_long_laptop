@@ -1,68 +1,86 @@
-
 #include "../include/so_long.h"
+
+int	clean_line(char *line)
+{
+	int	len;
+
+	len = ft_strlen(line);
+	if (len && line[len - 1] == '\n')
+		line[--len] = '\0';
+	return (len);
+}
+
+char	*validate_and_copy(char *line, int *width, char **map, int r)
+{
+	int		len;
+	char	*row;
+
+	(void)r;
+	(void)map;
+	len = clean_line(line);
+	if (*width == -1)
+		*width = len;
+	else if (*width != len)
+		return (NULL);
+	row = malloc(len + 1);
+	if (!row)
+		return (NULL);
+	ft_strlcpy(row, line, len + 1);
+	return (row);
+}
+
+char	**append_row(char **map, char *row, int r, int fd)
+{
+	char	**tmp;
+
+	tmp = my_new_func(map, row, r);
+	if (!tmp)
+		return (my_free(row, map, fd, r));
+	return (tmp);
+}
+
+static int	read_loop(int fd, char ***map_p, int *r_p, int *width_p)
+{
+	char	*line;
+	char	*row;
+	char	**tmp;
+
+	line = get_next_line(fd);
+	while (line)
+	{
+		row = validate_and_copy(line, width_p, *map_p, *r_p);
+		if (!row)
+			return (my_free(line, *map_p, fd, *r_p), 0);
+		free(line);
+		tmp = append_row(*map_p, row, *r_p, fd);
+		if (!tmp)
+			return (0);
+		*map_p = tmp;
+		(*r_p)++;
+		line = get_next_line(fd);
+	}
+	return (1);
+}
 
 char	**read_map(const char *filename, int *rows, int *cols)
 {
-	FILE *file = fopen(filename, "r");
-	if (!file)
-		return NULL;
+	int		fd;
+	int		width;
+	int		r;
+	char	**map;
 
-	char **map = NULL;
-	char *line = NULL;
-	size_t cap = 0;
-	ssize_t len;
-	int r = 0;
-	int width = -1;
-
-	/* use getline for arbitrary length lines */
-	while ((len = getline(&line, &cap, file)) != -1)
-	{
-		if (len > 0 && line[len-1] == '\n')
-		{
-			line[len-1] = '\0';
-			len--;
-		}
-		if (width == -1)
-			width = (int)len;
-		else if ((int)len != width)
-		{
-			free(line);
-			free_map(map, r);
-			fclose(file);
-			return NULL; /* non-rectangular */
-		}
-		char *row = malloc((size_t)len + 1);
-		if (!row)
-		{
-			free(line);
-			free_map(map, r);
-			fclose(file);
-			return NULL;
-		}
-		ft_strcpy(row, line);
-		char **tmp = realloc(map, sizeof(char*) * (r + 1));
-		if (!tmp)
-		{
-			free(row);
-			free(line);
-			free_map(map, r);
-			fclose(file);
-			return NULL;
-		}
-		map = tmp;
-		map[r] = row;
-		r++;
-	}
-	free(line);
-	fclose(file);
-
+	fd = open(filename, O_RDONLY);
+	if (fd < 0)
+		return (NULL);
+	width = -1;
+	r = 0;
+	map = NULL;
+	if (!read_loop(fd, &map, &r, &width))
+		return (NULL);
+	close(fd);
 	if (r == 0)
-	{
-		free_map(map, r);
-		return NULL;
-	}
-
+		return (NULL);
 	*rows = r;
 	*cols = width;
-	return map;
+	return (map);
 }

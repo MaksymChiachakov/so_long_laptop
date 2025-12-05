@@ -37,12 +37,14 @@ void	free_images(t_data *data)
 
 void	clean_and_exit(t_data *data, const char *msg)
 {
+	size_t	len;
+
 	if (msg)
 	{
-		if (strncmp(msg, "Error", 5) == 0)
-			fprintf(stderr, "%s\n", msg);
-		else
-			printf("%s\n", msg);
+		len = ft_strlen(msg);
+		if (ft_strncmp(msg, "Error", 5) == 0)
+			write(1, msg, len);
+		write(1, "\n", 2);
 	}
 	if (data)
 	{

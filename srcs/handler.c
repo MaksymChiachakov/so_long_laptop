@@ -2,8 +2,9 @@
 
 void	finish_game(t_data *data)
 {
-	printf("Congratulations! You escaped in %d moves!\n", data->moves);
-	clean_and_exit(data, "Goodbye");
+	write(1, "Congratulations!", 16);
+	write(1, "\n", 2);
+	clean_and_exit(data, "");
 }
 
 void	pixel_to_tile(int px, int py, int *tx, int *ty)
@@ -42,8 +43,8 @@ void	my_test_func(t_data *data, int new_x, int new_y)
 
 void	my_test_second_func(t_data *data, int keysym)
 {
-	int		new_x;
-	int		new_y;
+	int	new_x;
+	int	new_y;
 
 	new_x = data->player_x;
 	new_y = data->player_y;

@@ -15,7 +15,7 @@ NAME = so_long
 SRCS = ./srcs/main.c ./srcs/flood_fill.c ./srcs/free.c ./srcs/handler.c \
 		./srcs/init_player.c ./srcs/map_valide.c ./srcs/read_map.c \
 		./srcs/render_map.c ./srcs/gnl.c ./srcs/flood_fill_utils.c \
-		./srcs/read_map_utils.c ./srcs/handler_utils.c 
+		./srcs/read_map_utils.c ./srcs/handler_utils.c ./srcs/canva.c 
 OBJS = $(SRCS:.c=.o)
 
 CC = cc

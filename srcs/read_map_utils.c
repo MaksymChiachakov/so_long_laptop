@@ -10,8 +10,8 @@ char	**my_free(char *row_line, char **map, int fd, int r)
 
 char	**my_new_func(char **map, char *row, int r)
 {
-	int     i;
-    char    **tmp;
+	int		i;
+	char	**tmp;
 
 	tmp = malloc(sizeof(char *) * (r + 1));
 	if (!tmp)

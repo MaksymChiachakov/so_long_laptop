@@ -12,9 +12,9 @@
 
 #include <stdlib.h>
 // #include "../include/so_long.h"
+#include "../minilibx-linux/mlx.h"
 #include <X11/X.h>
 #include <X11/keysym.h>
-#include "../minilibx-linux/mlx.h"
 
 #define WINDOW_WIDTH 1920
 #define WINDOW_HEIGHT 1200
@@ -29,10 +29,10 @@ typedef struct s_img
 {
 	void	*mlx_img;
 	char	*addr;
-	int		bpp; 
+	int		bpp;
 	int		line_len;
 	int		endian;
-}	t_img;
+}			t_img;
 
 typedef struct s_data
 {
@@ -40,26 +40,26 @@ typedef struct s_data
 	void	*win_ptr;
 	t_img	img;
 
-	int	player_x;
-	int	player_y;
-	int	player2_x;
-	int	player2_y;
+	int		player_x;
+	int		player_y;
+	int		player2_x;
+	int		player2_y;
 
-}	t_data;
+}			t_data;
 
 typedef struct s_rect
 {
-	int	x;
-	int	y;
-	int width;
-	int height;
-	int color;
-}	t_rect;
+	int		x;
+	int		y;
+	int		width;
+	int		height;
+	int		color;
+}			t_rect;
 
 void	img_pix_put(t_img *img, int x, int y, int color)
 {
-	char *pixel;
-	int i;
+	char	*pixel;
+	int		i;
 
 	if (x < 0 || y < 0 || x >= WINDOW_WIDTH || y >= WINDOW_HEIGHT)
 		return ;
@@ -114,7 +114,6 @@ int	handle_keypress(int keysym, t_data *data)
 		data->win_ptr = NULL;
 		return (0);
 	}
-
 	if (keysym == XK_Up && data->player_y > 0)
 		data->player_y -= 10;
 	if (keysym == XK_Down && data->player_y < WINDOW_HEIGHT - 100)
@@ -138,18 +137,13 @@ int	render(t_data *data)
 {
 	if (data->win_ptr == NULL)
 		return (1);
-
-	render_background(&data->img, WHITE_PIXEL); 
-
-	render_rect(&data->img,
-		(t_rect){data->player_x, data->player_y, 100, 100, RED_PIXEL}); // rouge
-
-	render_rect(&data->img,
-		(t_rect){data->player2_x, data->player2_y, 100, 100, GREEN_PIXEL}); // vert
-
-	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
-		data->img.mlx_img, 0, 0);
-
+	render_background(&data->img, WHITE_PIXEL);
+	render_rect(&data->img, (t_rect){data->player_x, data->player_y, 100, 100,
+		RED_PIXEL});     // rouge
+	render_rect(&data->img, (t_rect){data->player2_x, data->player2_y, 100, 100,
+		GREEN_PIXEL}); // vert
+	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.mlx_img, 0,
+		0);
 	return (0);
 }
 
@@ -159,34 +153,23 @@ int	main(void)
 
 	data.player_x = 0;
 	data.player_y = 0;
-
 	data.player2_x = WINDOW_WIDTH - 100;
 	data.player2_y = WINDOW_HEIGHT - 100;
-
 	data.mlx_ptr = mlx_init();
 	if (!data.mlx_ptr)
 		return (MLX_ERROR);
-
-	data.win_ptr = mlx_new_window(data.mlx_ptr,
-			WINDOW_WIDTH, WINDOW_HEIGHT, "so_long");
+	data.win_ptr = mlx_new_window(data.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT,
+			"so_long");
 	if (!data.win_ptr)
 		return (MLX_ERROR);
-
 	data.img.mlx_img = mlx_new_image(data.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
-	data.img.addr = mlx_get_data_addr(
-			data.img.mlx_img,
-			&data.img.bpp,
-			&data.img.line_len,
-			&data.img.endian);
-
+	data.img.addr = mlx_get_data_addr(data.img.mlx_img, &data.img.bpp,
+			&data.img.line_len, &data.img.endian);
 	mlx_loop_hook(data.mlx_ptr, &render, &data);
 	mlx_hook(data.win_ptr, KeyPress, KeyPressMask, &handle_keypress, &data);
-
 	mlx_loop(data.mlx_ptr);
-
 	mlx_destroy_image(data.mlx_ptr, data.img.mlx_img);
 	mlx_destroy_display(data.mlx_ptr);
 	free(data.mlx_ptr);
-
 	return (0);
 }

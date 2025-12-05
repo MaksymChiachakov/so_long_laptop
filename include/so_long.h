@@ -64,6 +64,21 @@ typedef struct s_data
     int     moves;
 }   t_data;
 
+typedef struct s_imginfo
+{
+	char	*addr;
+	int		bpp;
+	int		size_line;
+	int		endian;
+}   t_imginfo;
+
+typedef struct s_rc
+{
+	int	rows;
+	int	cols;
+    char **copy;
+}   t_rc;
+
 typedef struct s_pt 
 { 
     int x; 
@@ -85,8 +100,6 @@ void    finish_game(t_data *data);
 void pixel_to_tile(int px, int py, int *tx, int *ty);
 int handle_keypress(int keysym, void *param);
 int handle_close(void *param);
-void init_player(t_data *data);
-void put_image_with_transparency(t_data *data, void *img, int img_w, int img_h, int x_pos, int y_pos);
 int has_extension_ber(const char *name);
 int validate_map_structure(t_data *data, char **map, char **err_msg);
 char **read_map(const char *filename, int *rows, int *cols);
@@ -100,12 +113,13 @@ char	*ft_next(char *str);
 char	*get_next_line(int fd);
 int     flood_check(t_data *data);
 void    bfs_run(char **copy, t_pt *queue, int rows, int cols);
+void	put_image_with_transparency(t_data *data, void *img, int x, int y);
+void	init_player(t_data *data);
 int     flood_verify(char **copy, char **map, int rows, int cols);
 char    **copy_map(char **map, int rows);
 int     find_player(char **map, t_size size, int *sx, int *sy);
 void	set_neighbor(t_pt cur, int dir, int *nx, int *ny);
-void	process_neighbors(char **copy, t_pt cur, t_pt *queue,
-			int *tail, int rows, int cols);
+void	process_neighbors(t_rc rc, t_pt cur, t_pt *queue, int *tail);
 
 char	**my_free(char *row_line, char **map, int fd, int r);
 char	**my_new_func(char **map, char *row, int r);

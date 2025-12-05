@@ -72,8 +72,7 @@ void	set_neighbor(t_pt cur, int dir, int *nx, int *ny)
 	}
 }
 
-void	process_neighbors(char **copy, t_pt cur, t_pt *queue,
-			int *tail, int rows, int cols)
+void	process_neighbors(t_rc rc, t_pt cur, t_pt *queue, int *tail)
 {
 	int	dir;
 	int	nx;
@@ -83,11 +82,11 @@ void	process_neighbors(char **copy, t_pt cur, t_pt *queue,
 	while (dir < 4)
 	{
 		set_neighbor(cur, dir, &nx, &ny);
-		if (nx >= 0 && nx < cols && ny >= 0 && ny < rows)
+		if (nx >= 0 && nx < rc.cols && ny >= 0 && ny < rc.rows)
 		{
-			if (copy[ny][nx] != '1' && copy[ny][nx] != 'X')
+			if (rc.copy[ny][nx] != '1' && rc.copy[ny][nx] != 'X')
 			{
-				copy[ny][nx] = 'X';
+				rc.copy[ny][nx] = 'X';
 				queue[(*tail)++] = (t_pt){nx, ny};
 			}
 		}

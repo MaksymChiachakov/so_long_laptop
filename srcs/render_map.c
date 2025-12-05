@@ -40,16 +40,13 @@ void	my_best_func(char c, t_data *data, int px, int py)
 	if (c == 'E')
 	{
 		if (data->collectibles > 0)
-			put_image_with_transparency(data, data->exit_close, data->player_w,
-				data->player_h, px, py);
+			put_image_with_transparency(data, data->exit_close, px, py);
 		else
-			put_image_with_transparency(data, data->exit_open, data->player_w,
-				data->player_h, px, py);
+			put_image_with_transparency(data, data->exit_open, px, py);
 	}
 	else if (c == 'C')
 	{
-		put_image_with_transparency(data, data->treasure, data->player_w,
-			data->player_h, px, py);
+		put_image_with_transparency(data, data->treasure, px, py);
 	}
 }
 
@@ -85,7 +82,6 @@ void	render_map(t_data *data)
 {
 	render_background(data);
 	my_new_best_func(data);
-	put_image_with_transparency(data, data->player_img, data->player_w,
-		data->player_h, data->offset_x + data->player_x, data->offset_y
-		+ data->player_y);
+	put_image_with_transparency(data, data->player_img, data->offset_x
+		+ data->player_x, data->offset_y + data->player_y);
 }

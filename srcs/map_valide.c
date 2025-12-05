@@ -1,7 +1,3 @@
-
-
-#include "../include/so_long.h"
-
 #include "../include/so_long.h"
 
 int	has_extension_ber(const char *name)
@@ -16,9 +12,11 @@ int	has_extension_ber(const char *name)
 
 int	check_wall(char **err_msg, char **map, int y, int x)
 {
+	(void)err_msg;
+
 	if (map[y][x] != '1')
 	{
-		*err_msg = "Error\nMap is not closed by walls";
+		write(1, "Error\nMap is not closed by walls\n", 34);
 		return (0);
 	}
 	return (1);
@@ -37,14 +35,12 @@ int	update_counts(int *p, int *e, int *c, char ch)
 	return (1);
 }
 
-int	validate_counts(t_data *data, char **err_msg, int p, int e, int c)
+int	validate_counts(t_data *data, int p, int e, int c)
 {
-	if (p != 1)
-		return (*err_msg = "Error\nMap must contain exactly one P", 0);
-	if (e != 1)
-		return (*err_msg = "Error\nMap must contain exactly one E", 0);
+	if (p != 1 || e != 1)
+		return (0);
 	if (c < 1)
-		return (*err_msg = "Error\nMap must contain at least one C", 0);
+		return (0);
 	data->collectibles = c;
 	return (1);
 }
@@ -57,25 +53,22 @@ int	validate_map_structure(t_data *data, char **map, char **err_msg)
 	int	e;
 	int	c;
 
-	y = 0;
+	y = -1;
 	p = 0;
 	e = 0;
 	c = 0;
-	while (y < data->rows)
+	while (++y < data->rows)
 	{
 		if ((int)ft_strlen(map[y]) != data->cols)
 			return (*err_msg = "Error\nMap is not rectangular", 0);
-		x = 0;
-		while (x < data->cols)
+		x = -1;
+		while (++x < data->cols)
 		{
 			update_counts(&p, &e, &c, map[y][x]);
 			if (y == 0 || y == data->rows - 1 || x == 0 || x == data->cols - 1)
 				if (!check_wall(err_msg, map, y, x))
 					return (0);
-			x++;
 		}
-		y++;
 	}
-	return (validate_counts(data, err_msg, p, e, c));
+	return (validate_counts(data, p, e, c));
 }
-

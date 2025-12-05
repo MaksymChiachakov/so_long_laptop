@@ -5,13 +5,17 @@ void	bfs_run(char **copy, t_pt *queue, int rows, int cols)
 	int		head;
 	int		tail;
 	t_pt	cur;
+	t_rc	rc;
 
 	head = 0;
 	tail = 1;
+	rc.rows = rows;
+	rc.cols = cols;
+	rc.copy = copy;
 	while (head < tail)
 	{
 		cur = queue[head++];
-		process_neighbors(copy, cur, queue, &tail, rows, cols);
+		process_neighbors(rc, cur, queue, &tail);
 	}
 }
 
@@ -39,7 +43,7 @@ int	flood_check(t_data *data)
 {
 	char	**copy;
 	t_pt	*queue;
-	t_size size;
+	t_size	size;
 	int		sx;
 	int		sy;
 

@@ -93,10 +93,10 @@ char	*ft_next(char *str)
 
 char	*get_next_line(int fd)
 {
-	static char *line;
-	char *buff;
-	char *res;
-	int nbytes;
+	static char	*line;
+	char		*buff;
+	char		*res;
+	int			nbytes;
 
 	nbytes = 1;
 	if (fd < 0 || fd > 1024 || BUFFER_SIZE <= 0)

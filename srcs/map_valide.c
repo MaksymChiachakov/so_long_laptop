@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map_valide.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mchiacha <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/05 13:30:59 by mchiacha          #+#    #+#             */
+/*   Updated: 2025/12/05 13:31:34 by mchiacha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/so_long.h"
 
 int	has_extension_ber(const char *name)
@@ -13,7 +25,6 @@ int	has_extension_ber(const char *name)
 int	check_wall(char **err_msg, char **map, int y, int x)
 {
 	(void)err_msg;
-
 	if (map[y][x] != '1')
 	{
 		write(1, "Error\nMap is not closed by walls\n", 34);

@@ -6,7 +6,7 @@
 #    By: mchiacha <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/25 13:22:14 by mchiacha          #+#    #+#              #
-#    Updated: 2025/11/27 14:08:55 by mchiacha         ###   ########.fr        #
+#    Updated: 2025/12/08 15:27:22 by mchiacha         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,11 +15,12 @@ NAME = so_long
 SRCS = ./srcs/main.c ./srcs/flood_fill.c ./srcs/free.c ./srcs/handler.c \
 		./srcs/init_player.c ./srcs/map_valide.c ./srcs/read_map.c \
 		./srcs/render_map.c ./srcs/gnl.c ./srcs/flood_fill_utils.c \
-		./srcs/read_map_utils.c ./srcs/handler_utils.c ./srcs/canva.c 
+		./srcs/read_map_utils.c ./srcs/handler_utils.c ./srcs/canva.c \
+		./srcs/ft_printf.c
 OBJS = $(SRCS:.c=.o)
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g3
 RM = rm -f
 
 MLX_DIR = ./minilibx-linux

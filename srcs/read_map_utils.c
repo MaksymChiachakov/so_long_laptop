@@ -15,6 +15,7 @@
 char	**my_free(char *row_line, char **map, int fd, int r)
 {
 	free(row_line);
+	row_line = NULL;
 	free_map(map, r);
 	close(fd);
 	return (NULL);

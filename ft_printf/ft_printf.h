@@ -1,23 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mchiacha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/04 17:38:51 by mchiacha          #+#    #+#             */
-/*   Updated: 2025/12/10 11:27:36 by mchiacha         ###   ########.fr       */
+/*   Created: 2025/12/08 14:18:43 by mchiacha          #+#    #+#             */
+/*   Updated: 2025/12/08 14:18:44 by mchiacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef FT_PRINTF_H
+# define FT_PRINTF_H
 
-size_t	ft_strlen(const char *s)
-{
-	size_t	i;
+# include <stdlib.h>
+# include <stdarg.h>
+# include <unistd.h>
+# include <stdio.h>
 
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
-}
+int		ft_printf(const char *format, ...);
+int		ft_putnbr_base(unsigned long long nb, const char *base);
+
+#endif

@@ -6,7 +6,7 @@
 /*   By: mchiacha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 13:30:25 by mchiacha          #+#    #+#             */
-/*   Updated: 2025/12/05 13:30:26 by mchiacha         ###   ########.fr       */
+/*   Updated: 2025/12/08 17:59:55 by mchiacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,16 @@ void	free_images(t_data *data)
 		mlx_destroy_image(data->mlx_ptr, data->player_img);
 }
 
+void	my_little_free(t_data *data)
+{
+	if (data->mlx_ptr)
+	{
+		mlx_destroy_display(data->mlx_ptr);
+		free(data->mlx_ptr);
+		data->mlx_ptr = NULL;
+	}
+}
+
 void	clean_and_exit(t_data *data, const char *msg)
 {
 	size_t	len;
@@ -54,20 +64,21 @@ void	clean_and_exit(t_data *data, const char *msg)
 	if (msg)
 	{
 		len = ft_strlen(msg);
-		if (ft_strncmp(msg, "Error", 5) == 0)
-			write(1, msg, len);
-		write(1, "\n", 2);
+		write(1, msg, len);
 	}
 	if (data)
 	{
 		if (data->win_ptr)
+		{
 			mlx_destroy_window(data->mlx_ptr, data->win_ptr);
+			data->win_ptr = NULL;
+		}
 		free_images(data);
 		free_map(data->map, data->rows);
 	}
-	if (msg && ft_strncmp(msg, "Error", 5) == 0)
+	my_little_free(data);
+	if (msg && ft_strncmp(msg, "Error\n", 6) == 0)
 		exit(1);
 	else
 		exit(0);
 }
-// exit((msg && strncmp(msg, "Error", 5) == 0) ? 1 : 0);

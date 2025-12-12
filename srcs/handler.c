@@ -11,12 +11,13 @@
 /* ************************************************************************** */
 
 #include "../include/so_long.h"
+#include "../ft_printf/ft_printf.h"
 
 void	finish_game(t_data *data)
 {
 	write(1, "Congratulations!", 16);
 	write(1, "\n", 2);
-	clean_and_exit(data, "");
+	clean_and_exit(data, NULL);
 }
 
 void	pixel_to_tile(int px, int py, int *tx, int *ty)
@@ -40,8 +41,6 @@ void	my_test_func(t_data *data, int new_x, int new_y)
 		{
 			data->player_x = new_x;
 			data->player_y = new_y;
-			data->moves++;
-			printf("Moves: %d\n", data->moves);
 			if (tile == 'C')
 			{
 				data->map[tile_y][tile_x] = '0';
@@ -49,26 +48,22 @@ void	my_test_func(t_data *data, int new_x, int new_y)
 			}
 			if (tile == 'E' && data->collectibles == 0)
 				finish_game(data);
+			put_image_with_transparency(data, data->player_img, data->offset_x
+				+ data->player_x, data->offset_y + data->player_y);
 		}
 	}
 }
 
 void	my_test_second_func(t_data *data, int keysym)
 {
-	int	new_x;
-	int	new_y;
-
-	new_x = data->player_x;
-	new_y = data->player_y;
 	if (keysym == XK_a || keysym == XK_A || keysym == XK_Left)
-		new_x -= TILE_SIZE;
+		affiche(data, 1);
 	if (keysym == XK_d || keysym == XK_D || keysym == XK_Right)
-		new_x += TILE_SIZE;
+		affiche(data, 2);
 	if (keysym == XK_w || keysym == XK_W || keysym == XK_Up)
-		new_y -= TILE_SIZE;
+		affiche(data, 3);
 	if (keysym == XK_s || keysym == XK_S || keysym == XK_Down)
-		new_y += TILE_SIZE;
-	my_test_func(data, new_x, new_y);
+		affiche(data, 4);
 }
 
 int	handle_keypress(int keysym, void *param)
@@ -81,7 +76,12 @@ int	handle_keypress(int keysym, void *param)
 		clean_and_exit(data, "Goodbye");
 		return (0);
 	}
+	// data->is_moving = 1;
 	my_test_second_func(data, keysym);
-	render_map(data);
+	// data->frame = 0;
+	my_new_best_func(data);
+	put_image_with_transparency(data, data->player_img, data->offset_x
+		+ data->player_x, data->offset_y + data->player_y);
+
 	return (0);
 }

@@ -35,7 +35,9 @@ int	check_wall(char **err_msg, char **map, int y, int x)
 
 int	update_counts(int *p, int *e, int *c, char ch)
 {
-	if (ch == 'P')
+	if (ch != 'P' && ch != 'E' && ch != 'C' && ch != '1' && ch != '0')
+		return (0);
+	else if (ch == 'P')
 		(*p)++;
 	else if (ch == 'E')
 		(*e)++;
@@ -71,14 +73,15 @@ int	validate_map_structure(t_data *data, char **map, char **err_msg)
 	while (++y < data->rows)
 	{
 		if ((int)ft_strlen(map[y]) != data->cols)
-			return (*err_msg = "Error\nMap is not rectangular", 0);
+			return (clean_and_exit(data, "Error\nMap is not rectangular"), 0);
 		x = -1;
 		while (++x < data->cols)
 		{
-			update_counts(&p, &e, &c, map[y][x]);
+			if (!update_counts(&p, &e, &c, map[y][x]))
+				return (clean_and_exit(data, "Error\nInvalid map\n"), 0);
 			if (y == 0 || y == data->rows - 1 || x == 0 || x == data->cols - 1)
 				if (!check_wall(err_msg, map, y, x))
-					return (0);
+					return (clean_and_exit(data, NULL), 0);
 		}
 	}
 	return (validate_counts(data, p, e, c));

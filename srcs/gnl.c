@@ -6,7 +6,7 @@
 /*   By: mchiacha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 13:30:29 by mchiacha          #+#    #+#             */
-/*   Updated: 2025/12/05 13:30:30 by mchiacha         ###   ########.fr       */
+/*   Updated: 2025/12/10 11:17:26 by mchiacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,10 +91,10 @@ char	*ft_next(char *str)
 	while (str[i] && str[i] != '\n')
 		i++;
 	if (!str[i])
-		return (free(str), NULL);
+		return (free(str), str = NULL, NULL);
 	buff = malloc(sizeof(char) * (ft_strlen(str) - i));
 	if (!buff)
-		return (free(str), NULL);
+		return (free(buff), free(str), buff = NULL, str = NULL, NULL);
 	j = i + 1;
 	i = 0;
 	while (str[j])
@@ -115,16 +115,16 @@ char	*get_next_line(int fd)
 		return (free(line), NULL);
 	buff = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buff)
-		return (NULL);
+		return (free(buff), free(line), NULL);
 	while (nbytes && !ft_is_new_line(line))
 	{
 		nbytes = read(fd, buff, BUFFER_SIZE);
 		if (nbytes == -1)
-			return (free(buff), NULL);
+			return (free(buff), free(line), NULL);
 		buff[nbytes] = '\0';
 		line = ft_strjoin(line, buff);
 		if (!line)
-			return (free(buff), NULL);
+			return (free(buff), free(line), NULL);
 	}
 	res = ft_get_line(line);
 	line = ft_next(line);

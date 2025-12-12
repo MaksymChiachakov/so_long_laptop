@@ -45,12 +45,13 @@ void	draw_loop(t_data *data, t_imginfo *info, int x, int y)
 	}
 }
 
-void	put_image_with_transparency(t_data *data, void *img, int x, int y)
+int	put_image_with_transparency(t_data *data, void *img, int x, int y)
 {
 	t_imginfo	info;
 
 	get_img_addr(&info, img);
 	if (!info.addr)
-		return ;
+		return (clean_and_exit(data, NULL), 0);
 	draw_loop(data, &info, x, y);
+	return (1);
 }

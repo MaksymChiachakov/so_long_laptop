@@ -6,7 +6,7 @@
 /*   By: mchiacha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 13:31:08 by mchiacha          #+#    #+#             */
-/*   Updated: 2025/12/05 13:31:10 by mchiacha         ###   ########.fr       */
+/*   Updated: 2025/12/10 11:19:20 by mchiacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	clean_line(char *line)
 	int	len;
 
 	len = ft_strlen(line);
-	if (len && line[len - 1] == '\n')
+	if (len && len <= 30 && line[len - 1] == '\n')
 		line[--len] = '\0';
 	return (len);
 }
@@ -56,10 +56,14 @@ static int	read_loop(int fd, char ***map_p, int *r_p, int *width_p)
 	char	*line;
 	char	*row;
 	char	**tmp;
+	int		i;
 
+	i = 0;
 	line = get_next_line(fd);
-	while (line)
+	while (line && i <= 16)
 	{
+		if (i > 15)
+			return (my_free(line, *map_p, fd, *r_p), 0);
 		row = validate_and_copy(line, width_p, *map_p, *r_p);
 		if (!row)
 			return (my_free(line, *map_p, fd, *r_p), 0);
@@ -70,6 +74,7 @@ static int	read_loop(int fd, char ***map_p, int *r_p, int *width_p)
 		*map_p = tmp;
 		(*r_p)++;
 		line = get_next_line(fd);
+		i++;
 	}
 	return (1);
 }
@@ -88,7 +93,10 @@ char	**read_map(const char *filename, int *rows, int *cols)
 	r = 0;
 	map = NULL;
 	if (!read_loop(fd, &map, &r, &width))
+	{
+		get_next_line(-1);
 		return (NULL);
+	}
 	close(fd);
 	if (r == 0)
 		return (NULL);

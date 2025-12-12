@@ -65,16 +65,17 @@ int	flood_check(t_data *data)
 	if (!copy)
 		return (0);
 	if (!find_player(copy, size, &sx, &sy))
-		return (free_map(copy, data->rows), 0);
+		return (clean_and_exit(data, NULL), free_map(copy, data->rows), 0);
 	queue = malloc(sizeof(t_pt) * (data->rows * data->cols + 1));
 	if (!queue)
-		return (free_map(copy, data->rows), 0);
+		return (clean_and_exit(data, NULL), free_map(copy, data->rows), 0);
 	queue[0] = (t_pt){sx, sy};
 	copy[sy][sx] = 'X';
 	bfs_run(copy, queue, data->rows, data->cols);
 	free(queue);
 	if (!flood_verify(copy, data->map, data->rows, data->cols))
-		return (free_map(copy, data->rows), 0);
+		return (clean_and_exit(data, NULL), write(1, "Error\n", 6),
+			free_map(copy, data->rows), 0);
 	free_map(copy, data->rows);
 	return (1);
 }

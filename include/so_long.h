@@ -6,7 +6,7 @@
 /*   By: mchiacha <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 11:34:03 by mchiacha          #+#    #+#             */
-/*   Updated: 2025/12/05 13:39:12 by mchiacha         ###   ########.fr       */
+/*   Updated: 2025/12/08 18:03:36 by mchiacha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #  define _GNU_SOURCE 
 # endif
 # define WINDOW_WIDTH 1900
-# define WINDOW_HEIGHT 1200
+# define WINDOW_HEIGHT 1000
 # define TILE_SIZE 64
 # define MLX_ERROR 1
 
@@ -45,6 +45,9 @@ typedef struct s_data
 	void	*treasure;
 	void	*floor;
 	void	*player_img;
+	// int frame;        // frame de l’animation
+	// int is_moving;    // 1 quand le joueur bouge
+	// int direction;    // direction de marche (0=idle,1=gauche,2=droite,3=haut,4=bas)
 	int		player_x;
 	int		player_y;
 	int		offset_x;
@@ -86,9 +89,12 @@ typedef struct s_size
 }	t_size;
 
 int		flood_check(t_data *data);
+// int		handle_keyrelease(int keysym, void *param);
+// int		player_animation(t_data *data);
 void	free_map(char **map, int rows);
 void	free_images(t_data *data);
 void	clean_and_exit(t_data *data, const char *msg);
+void	my_best_func(char c, t_data *data, int px, int py); //
 void	finish_game(t_data *data);
 void	pixel_to_tile(int px, int py, int *tx, int *ty);
 int		handle_keypress(int keysym, void *param);
@@ -106,15 +112,18 @@ char	*ft_next(char *str);
 char	*get_next_line(int fd);
 int		flood_check(t_data *data);
 void	bfs_run(char **copy, t_pt *queue, int rows, int cols);
-void	put_image_with_transparency(t_data *data, void *img, int x, int y);
+int		put_image_with_transparency(t_data *data, void *img, int x, int y);
 void	init_player(t_data *data);
 int		flood_verify(char **copy, char **map, int rows, int cols);
 char	**copy_map(char **map, int rows);
 int		find_player(char **map, t_size size, int *sx, int *sy);
 void	set_neighbor(t_pt cur, int dir, int *nx, int *ny);
 void	process_neighbors(t_rc rc, t_pt cur, t_pt *queue, int *tail);
-
 char	**my_free(char *row_line, char **map, int fd, int r);
 char	**my_new_func(char **map, char *row, int r);
+void	my_new_best_func(t_data *data);
+void	my_test_second_func(t_data *data, int keysym);
+void	affiche(t_data *data, int i);
+void	my_test_func(t_data *data, int new_x, int new_y);
 
 #endif

@@ -104,6 +104,4 @@ void	render_map(t_data *data)
 	my_new_best_func(data);
 	put_image_with_transparency(data, data->player_img, data->offset_x
 		+ data->player_x, data->offset_y + data->player_y);
-
-
 }

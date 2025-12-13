@@ -95,6 +95,7 @@ char	**read_map(const char *filename, int *rows, int *cols)
 	if (!read_loop(fd, &map, &r, &width))
 	{
 		get_next_line(-1);
+		close(fd);
 		return (NULL);
 	}
 	close(fd);

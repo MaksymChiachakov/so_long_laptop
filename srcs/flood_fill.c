@@ -74,8 +74,8 @@ int	flood_check(t_data *data)
 	bfs_run(copy, queue, data->rows, data->cols);
 	free(queue);
 	if (!flood_verify(copy, data->map, data->rows, data->cols))
-		return (clean_and_exit(data, NULL), write(1, "Error\n", 6),
-			free_map(copy, data->rows), 0);
+		return (free_map(copy, data->rows), write(1, "Error\n", 6),
+			clean_and_exit(data, NULL), 0);
 	free_map(copy, data->rows);
 	return (1);
 }

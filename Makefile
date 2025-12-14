@@ -20,7 +20,7 @@ SRCS = ./srcs/main.c ./srcs/flood_fill.c ./srcs/free.c ./srcs/handler.c \
 OBJS = $(SRCS:.c=.o)
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3
+CFLAGS = -Wall -Wextra -Werror
 RM = rm -f
 
 MLX_DIR = ./minilibx-linux
@@ -41,10 +41,12 @@ $(LIBFT):
 clean:
 	$(RM) $(OBJS)
 	make clean -C $(MLX_DIR)
+	make -C $(LIBFT_DIR) fclean
 
 fclean: clean
 	$(RM) $(NAME)
 	make -C $(LIBFT_DIR) fclean
+	make clean -C $(MLX_DIR)
 
 re: fclean all
 
